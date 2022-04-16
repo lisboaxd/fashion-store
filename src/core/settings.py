@@ -45,6 +45,7 @@ DJANGO_BUILT_APPS = [
     "rest_framework",
     "rest_framework.authtoken",
     "django_extensions",
+    "drf_yasg",
 ]
 APPS = [
     "apps.sellers",
