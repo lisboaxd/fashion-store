@@ -1,7 +1,8 @@
-from django.db import models
-from django.contrib.auth import get_user_model
-
 from core.models import TimeStampedModel
+from django.contrib.auth import get_user_model
+from django.db import models
+
+from .utils import upload_gallery_image
 
 
 class Seller(TimeStampedModel):
@@ -18,7 +19,9 @@ class Category(TimeStampedModel):
     name = models.CharField(
         "Category", "category", max_length=255, blank=False, null=False
     )
-    owner = models.ForeignKey(Seller, on_delete=models.CASCADE)
+    owner = models.ForeignKey(
+        Seller, on_delete=models.CASCADE, related_name="categories"
+    )
 
     class Meta:
         verbose_name_plural = "categories"
@@ -31,7 +34,14 @@ class Product(TimeStampedModel):
     name = models.CharField(
         "Product", "product", max_length=255, blank=False, null=False
     )
-    category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    price = models.DecimalField(
+        "Price", max_digits=10, decimal_places=2, blank=False, null=False
+    )
+    description = models.TextField("Description", blank=True, null=True)
+
+    category = models.ForeignKey(
+        Category, on_delete=models.CASCADE, related_name="products"
+    )
 
     class Meta:
         verbose_name_plural = "products"
@@ -40,8 +50,17 @@ class Product(TimeStampedModel):
         return f"{self.product}"
 
 
+class Image(models.Model):
+    image = models.ImageField(upload_to=upload_gallery_image)
+    product = models.ForeignKey(
+        Product, on_delete=models.CASCADE, related_name="images"
+    )
+
+
 class Stock(models.Model):
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    product = models.ForeignKey(
+        Product, on_delete=models.CASCADE, related_name="stock"
+    )
     quantity = models.PositiveIntegerField(
         "Quantity", default=0, blank=False, null=False
     )
