@@ -1,4 +1,4 @@
-.PHONY: help build up export_dev export
+.PHONY: help build up export_dev export test
 .DEFAULT_GOAL := help
 
 args = `arg="$(filter-out $@,$(MAKECMDGOALS))" && echo $${arg:-${1}}`
@@ -17,3 +17,6 @@ export_dev: ## Export Developerment dependencies from Poetry. Generate requireme
 
 export: export_dev ## Export dependencies from Poetry. Generate requirements files
 	@poetry export -o requirements.txt
+
+test: ## Run all tests of the application
+	docker-compose -f compose/docker-compose.yml run --rm django python manage.py test
