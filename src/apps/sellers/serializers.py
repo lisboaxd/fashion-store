@@ -1,6 +1,8 @@
 from django.contrib.auth.models import User
 from rest_framework import serializers
 
+from apps.sellers.utils import add_permissions_to_user
+
 from .models import Category, Image, Product, Seller, Stock
 
 
@@ -24,6 +26,14 @@ class RegisterSellerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Seller
         fields = ["pk", "user"]
+
+    def create(self, validated_data):
+        user = User.objects.create_user(**validated_data["user"])
+        add_permissions_to_user(user, ["category", "image", "stock", "product"])
+        user.is_staff = True
+        user.save()
+        seller = Seller.objects.create(user=user)
+        return seller
 
 
 class SellerSerializer(serializers.ModelSerializer):

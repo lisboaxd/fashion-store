@@ -1,4 +1,4 @@
-from rest_framework import decorators, permissions, response, status
+from rest_framework import permissions, response, status
 from rest_framework.generics import (
     CreateAPIView,
     ListCreateAPIView,
@@ -25,17 +25,15 @@ class SellerRegisterAPIView(CreateAPIView):
         user_data = request.data.copy()
         serializer = UserSerializer(data=user_data)
         if serializer.is_valid(raise_exception=True):
-            user = serializer.save()
-            username = user_data.pop("username")
-            user_data.update({"username": "nada"})
-            seller_serializer = self.get_serializer(data={"user": user_data})
-            seller_serializer.is_valid()
-            seller_serializer.save(user=user)
-            user_data.update({"username": username})
-            return response.Response(
-                user_data,
-                status=status.HTTP_201_CREATED,
-            )
+            data = serializer.validated_data.copy()
+            seller_serializer = self.get_serializer(data={"user": data})
+            if seller_serializer.is_valid(raise_exception=True):
+                seller_serializer.save()
+                # TODO add exception handling and logs
+                return response.Response(
+                    seller_serializer.data,
+                    status=status.HTTP_201_CREATED,
+                )
 
 
 class SellerListCreateAPIView(ListCreateAPIView):
