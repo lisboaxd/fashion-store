@@ -7,6 +7,7 @@ from rest_framework.authtoken.views import obtain_auth_token
 from sellers.views import (
     CategoryListCreateAPIView,
     CategoryRetrieveUpdateDestroy,
+    ProductImage,
     ProductListCreateAPIView,
     ProductRetrieveUpdateDestroy,
     SellerListCreateAPIView,
@@ -78,6 +79,11 @@ urlpatterns = [
         "api/v1/product/<int:pk>",
         ProductRetrieveUpdateDestroy.as_view(),
         name="product_retrieve_update_destroy",
+    ),
+    path(
+        "api/v1/product/<int:pk>/image",
+        ProductImage.as_view(),
+        name="product_image",
     ),
     path(
         "api/v1/stock/",

@@ -53,14 +53,24 @@ class ImageSerializer(serializers.ModelSerializer):
     class Meta:
         model = Image
         fields = ["image", "pk"]
+        read_only_fields = ["pk"]
 
 
 class ProductSerializer(serializers.ModelSerializer):
-    images = ImageSerializer(many=True)
+    images = ImageSerializer(many=True, read_only=True)
 
     class Meta:
         model = Product
-        fields = ["pk", "product", "category", "price", "description", "images"]
+        fields = [
+            "pk",
+            "product",
+            "category",
+            "price",
+            "description",
+            "images",
+            "total_price",
+        ]
+        read_only_fields = ["total_price", "stock__quantity"]
 
 
 class StockSerializer(serializers.ModelSerializer):

@@ -49,6 +49,10 @@ class Product(TimeStampedModel):
     def __str__(self) -> str:
         return f"{self.product}"
 
+    @property
+    def total_price(self):
+        return self.price * self.stock.quantity
+
 
 class Image(models.Model):
     image = models.ImageField(upload_to=upload_gallery_image)
@@ -58,7 +62,7 @@ class Image(models.Model):
 
 
 class Stock(models.Model):
-    product = models.ForeignKey(
+    product = models.OneToOneField(
         Product, on_delete=models.CASCADE, related_name="stock"
     )
     quantity = models.PositiveIntegerField(

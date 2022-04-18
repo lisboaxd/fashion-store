@@ -1,3 +1,4 @@
+from django.shortcuts import get_object_or_404
 from rest_framework import permissions, response, status
 from rest_framework.generics import (
     CreateAPIView,
@@ -8,6 +9,7 @@ from rest_framework.generics import (
 from .models import Category, Product, Seller, Stock
 from .serializers import (
     CategorySerializer,
+    ImageSerializer,
     ProductSerializer,
     RegisterSellerSerializer,
     SellerSerializer,
@@ -55,9 +57,7 @@ class CategoryListCreateAPIView(ListCreateAPIView):
         serializer = serializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
             serializer.save(owner=request.user.seller)
-            return response.Response(
-                serializer.validated_data, status.HTTP_201_CREATED
-            )
+            return response.Response(serializer.data, status.HTTP_201_CREATED)
         # TODO log error on logservice
 
 
@@ -74,6 +74,20 @@ class ProductListCreateAPIView(ListCreateAPIView):
 class ProductRetrieveUpdateDestroy(RetrieveUpdateDestroyAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
+
+
+class ProductImage(CreateAPIView):
+    serializer_class = ImageSerializer
+
+    def create(self, request, *args, **kwargs):
+        product = get_object_or_404(Product, pk=kwargs.get("pk"))
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save(product=product)
+        headers = self.get_success_headers(serializer.data)
+        return response.Response(
+            serializer.data, status=status.HTTP_201_CREATED, headers=headers
+        )
 
 
 class StockListCreateAPIView(ListCreateAPIView):
