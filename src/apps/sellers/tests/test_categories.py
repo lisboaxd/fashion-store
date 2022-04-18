@@ -19,9 +19,7 @@ class CategoryTestCase(TestCase):
         self.post_data = {"category": "Test Category", "owner": self.seller.pk}
         self.client.login(username="test_user", password="Test@user__dafiti")
         self.create_read_url = reverse("category_list_create")
-        self.retrieve_update_delete_url = reverse(
-            "category_retrieve_update_destroy", kwargs={"pk": "1"}
-        )
+        self.retrieve_update_delete_url = "category_retrieve_update_destroy"
 
     def test_create(self):
         response = self.client.post(self.create_read_url, self.post_data)
@@ -35,13 +33,24 @@ class CategoryTestCase(TestCase):
 
     def test_retrieve(self):
         response = self.client.post(self.create_read_url, self.post_data)
-        response = self.client.get(self.retrieve_update_delete_url)
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        content = {"pk": 1, "category": "Test Category", "owner": 1}
-        self.assertEquals(response.json(), content)
+        response = self.client.get(
+            reverse(
+                self.retrieve_update_delete_url,
+                kwargs={"pk": response.json().get("pk")},
+            )
+        )
 
-    def teste_delete(self):
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        content = {"pk", "category", "owner"}
+        self.assertEquals(set(response.json().keys()), content)
+
+    def test_delete(self):
         response = self.client.post(self.create_read_url, self.post_data)
-        response = self.client.delete(self.retrieve_update_delete_url)
+        response = self.client.delete(
+            reverse(
+                self.retrieve_update_delete_url,
+                kwargs={"pk": response.json().get("pk")},
+            )
+        )
         self.assertEquals(response.status_code, 204)
         self.assertEquals(self.model_class.objects.count(), 0)
