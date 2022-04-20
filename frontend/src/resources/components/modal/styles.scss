@@ -1,0 +1,20 @@
+.modal {
+  position: absolute;
+  top: 50%;
+  left: 25%;
+  transform: translate(0, -50%);
+  width: 50%;
+
+  .content {
+    min-width: 25vw;
+  }
+}
+.full-opacity-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background-color: rgba(120, 120, 120, 0.7);
+  z-index: 10;
+}
