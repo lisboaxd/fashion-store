@@ -7,7 +7,10 @@ services:
         env_file: .env
         ports:
             - 5433:5432
+        volumes:
+            - ../data/postgres/pgdata:/var/lib/postgresql/data
     django:
+        &django
         build:
             context: ../
             dockerfile: compose/Dockerfile
@@ -15,7 +18,7 @@ services:
                 - USER_ID=1000
                 - GROUP_ID=1000
                 - REQUIREMENTS_FILE=requirements.dev.txt
-            target: dev # FROM builder as dev
+            target: application
         volumes:
             - ../src:/app
         restart: always
@@ -27,5 +30,53 @@ services:
             - "8000:8000" # "8000-8500:8000" # PORT RANGE TO SCALE
         depends_on:
             - postgres
+            - rabbitmq
+            - redis
         stdin_open: true
         tty: true
+    celeryworker:
+        <<: *django
+        build:
+            context: ../
+            dockerfile: compose/Dockerfile
+            args:
+                - USER_ID=1000
+                - GROUP_ID=1000
+                - REQUIREMENTS_FILE=requirements.dev.txt
+            target: worker
+        depends_on:
+            - rabbitmq
+            - redis
+            - postgres
+            # - mailhog
+        environment:
+            - CELERY_RDB_HOST=0.0.0.0
+            - CELERY_RDB_PORT=6900
+        ports:
+            - 6900-7000:6900-7000
+        # command: /entrypoint_worker
+        entrypoint: /entrypoint_worker
+    rabbitmq:
+        image: rabbitmq:3-management-alpine
+        # container_name: 'rabbitmq'
+        ports:
+            - 5672:5672
+            - 15672:15672
+        volumes:
+            - ../data/rabbitmq/data/:/var/lib/rabbitmq/
+    redis:
+        image: 'redis:5.0-alpine'
+        volumes:
+            - ../data/redis_data:/data'
+        env_file: .env
+        ports:
+            - 6379:6379
+    flower:
+        image: mher/flower:0.9.7
+        environment:
+            - FLOWER_PORT=8888
+            - CELERY_BROKER_URL=amqp://rabbitmq:5672
+        ports:
+            - 8889:8888
+        depends_on:
+            - rabbitmq
