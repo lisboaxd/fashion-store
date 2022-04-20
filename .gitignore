@@ -384,8 +384,12 @@ _pkginfo.txt
 *.appxbundle
 *.appxupload
 
-# vscode rest client 
+# local directories 
 rest_requests/
+src/images/
+frontend/
+data/
+
 
 # Visual Studio cache files
 # files ending in .cache can be ignored
