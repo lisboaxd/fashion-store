@@ -48,17 +48,14 @@ services:
             - rabbitmq
             - redis
             - postgres
-            # - mailhog
         environment:
             - CELERY_RDB_HOST=0.0.0.0
             - CELERY_RDB_PORT=6900
         ports:
             - 6900-7000:6900-7000
-        # command: /entrypoint_worker
         entrypoint: /entrypoint_worker
     rabbitmq:
         image: rabbitmq:3-management-alpine
-        # container_name: 'rabbitmq'
         ports:
             - 5672:5672
             - 15672:15672
