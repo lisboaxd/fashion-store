@@ -33,14 +33,18 @@ class SellerTestCase(TestCase):
     def test_should_register_new_seller(self):
         self.client.logout()
         post = {
-            "username": "test_user3",
-            "email": "test_user3@test.com",
-            "password": "Test@user__dafiti",
-            "first_name": "Test3",
-            "last_name": "User3",
+            "user": {
+                "username": "test_user3",
+                "email": "test_user3@test.com",
+                "password": "Test@user__dafiti",
+                "first_name": "Test3",
+                "last_name": "User3",
+            }
         }
         url = reverse("seller_register")
-        response = self.client.post(url, data=post)
+        response = self.client.post(
+            url, data=post, content_type="application/json"
+        )
         self.user_pk = response.json().get("pk")
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.client.login(username="test_user", password="Test@user__dafiti")
@@ -49,7 +53,7 @@ class SellerTestCase(TestCase):
         self.client.logout()
         post = self.user_values
         url = reverse("seller_register")
-        response = self.client.post(url, post)
+        response = self.client.post(url, {"user": post})
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.client.login(username="test_user", password="Test@user__dafiti")
 
