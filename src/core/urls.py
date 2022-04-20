@@ -7,6 +7,7 @@ from rest_framework.authtoken.views import obtain_auth_token
 from sellers.views import (
     CategoryListCreateAPIView,
     CategoryRetrieveUpdateDestroy,
+    CsvFile,
     ProductImage,
     ProductListCreateAPIView,
     ProductRetrieveUpdateDestroy,
@@ -94,5 +95,10 @@ urlpatterns = [
         "api/v1/stock/<int:pk>",
         StockRetrieveUpdateDestroy.as_view(),
         name="stock_retrieve_update_destroy",
+    ),
+    path(
+        "api/v1/csv/<str:model_name>",
+        CsvFile.as_view(),
+        name="post_csv_file",
     ),
 ]
