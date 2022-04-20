@@ -13,10 +13,12 @@ class ProductAdmin(admin.ModelAdmin):
 
     def get_queryset(self, request):
         qs = super().get_queryset(request)
-        return qs.filter(category__in=request.user.seller.categories.all())
+        if hasattr(request.user, "seller"):
+            return qs.filter(category__in=request.user.seller.categories.all())
+        return qs
 
     def formfield_for_foreignkey(self, db_field, request=None, **kwargs):
-        if db_field.name == "category":
+        if db_field.name == "category" and hasattr(request.user, "seller"):
             kwargs["queryset"] = Category.objects.filter(
                 pk__in=request.user.seller.categories.all().values_list("pk")
             )
@@ -26,10 +28,12 @@ class ProductAdmin(admin.ModelAdmin):
 class CategoryAdmin(admin.ModelAdmin):
     def get_queryset(self, request):
         qs = super().get_queryset(request)
-        return qs.filter(owner=request.user.seller)
+        if hasattr(request.user, "seller"):
+            return qs.filter(owner=request.user.seller)
+        return qs
 
     def formfield_for_foreignkey(self, db_field, request=None, **kwargs):
-        if db_field.name == "owner":
+        if db_field.name == "owner" and hasattr(request.user, "seller"):
             kwargs["queryset"] = Seller.objects.filter(
                 pk=request.user.seller.pk
             )
@@ -39,14 +43,19 @@ class CategoryAdmin(admin.ModelAdmin):
 class StockAdmin(admin.ModelAdmin):
     def get_queryset(self, request):
         qs = super().get_queryset(request)
-        categories = request.user.seller.categories.all()
-        return qs.filter(product__category__in=categories)
+        if hasattr(request.user, "seller"):
+            return request.user.seller.stock.all()
+        return qs
 
     def formfield_for_foreignkey(self, db_field, request=None, **kwargs):
-        if db_field.name == "product":
+        if db_field.name == "product" and hasattr(request.user, "seller"):
             categories = request.user.seller.categories.all()
             kwargs["queryset"] = Product.objects.filter(
                 category__in=categories.values_list("pk", flat=True)
+            )
+        if db_field.name == "seller" and hasattr(request.user, "seller"):
+            kwargs["queryset"] = Seller.objects.filter(
+                pk=request.user.seller.pk
             )
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
 

@@ -1,3 +1,5 @@
+from statistics import mode
+
 from core.models import TimeStampedModel
 from django.contrib.auth import get_user_model
 from django.db import models
@@ -28,6 +30,9 @@ class Category(TimeStampedModel):
 
     def __str__(self) -> str:
         return f"{self.category}"
+
+
+0
 
 
 class Product(TimeStampedModel):
@@ -64,6 +69,9 @@ class Image(models.Model):
 class Stock(models.Model):
     product = models.OneToOneField(
         Product, on_delete=models.CASCADE, related_name="stock"
+    )
+    seller = models.ForeignKey(
+        Seller, on_delete=models.CASCADE, related_name="stock"
     )
     quantity = models.PositiveIntegerField(
         "Quantity", default=0, blank=False, null=False

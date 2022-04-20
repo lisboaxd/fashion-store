@@ -46,7 +46,6 @@ class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
         fields = ["pk", "category", "owner"]
-        read_only_fields = ["owner"]
 
 
 class ImageSerializer(serializers.ModelSerializer):
@@ -76,4 +75,11 @@ class ProductSerializer(serializers.ModelSerializer):
 class StockSerializer(serializers.ModelSerializer):
     class Meta:
         model = Stock
-        fields = ["pk", "product", "quantity"]
+        fields = ["pk", "product", "quantity", "seller"]
+
+
+class CSVUploadSerializer(serializers.Serializer):
+    file = serializers.FileField()
+
+    class Meta:
+        fields = ("file",)
