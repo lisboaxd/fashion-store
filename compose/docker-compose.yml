@@ -1,5 +1,9 @@
 version: "3.8"
 
+volumes:
+    pgdata:
+    datarabbitmq:
+    data_redis:
 services:
     postgres:
         image: postgres:13.4-alpine
@@ -8,7 +12,7 @@ services:
         ports:
             - 5433:5432
         volumes:
-            - ../data/postgres/pgdata:/var/lib/postgresql/data
+            - "pgdata:/var/lib/postgresql/data"
     django:
         &django
         build:
@@ -60,11 +64,11 @@ services:
             - 5672:5672
             - 15672:15672
         volumes:
-            - ../data/rabbitmq/data/:/var/lib/rabbitmq/
+            - "datarabbitmq/:/var/lib/rabbitmq/"
     redis:
         image: 'redis:5.0-alpine'
         volumes:
-            - ../data/redis_data:/data'
+            - "data_redis:/data"
         env_file: .env
         ports:
             - 6379:6379
