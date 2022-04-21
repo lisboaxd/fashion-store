@@ -23,10 +23,10 @@ Clone esse repositório:
 ```
 $ git clone git@github.com:lisboaxd/fashion-store.git
 $ cd fashion-store/
-$ cp compose/.env.example compose/.env
+$ cp backend/compose/.env.example backend/compose/.env
 ```
 
-Edite as chaves no arquivo `.env` com a senha do banco de dados e chave secreta do Django
+Edite as chaves no arquivo `backend/compose/.env` com a senha do banco de dados e chave secreta do Django
 
 ```
 #compose/.env
@@ -38,22 +38,26 @@ DJANGO_SECRET_KEY=<chave_secreta_aqui>
 ...
 ```
 
-Após as alterações feitas no arquivo `.env`
+Após as alterações feitas no arquivo `backend/compose/.env`
+Execute no ditóerio radiz do projeto
 
 ```
 $ make setup
 $ make up
 ```
 
-Acesse o sistema em `http://localhost:8000/`
-
-##### Comandos auxiliares
-
-Para carregar dados básicos:
+Acesse o sistema em `http://localhost:8000/admin`
+em outro terminal, execute o seguinte comanda para carregar dados básicos
 
 ```
 $ make loaddata
 ```
+
+Agora será possível acessar o admin com usuário `dafiti`e senha `dafiti`
+
+##### Comandos auxiliares
+
+Para carregar dados básicos:
 
 Para rodar os testes:
 
@@ -61,23 +65,42 @@ Para rodar os testes:
 $ make test
 ```
 
-##### Documentação dos endpoints da aplicação
+## Iniciando Front-end
 
-Documentação da api `http://localhost:8000/docs`
+Em outro terminal acesse o diretório`frontend` e crie o arquivo `.env`
 
-##### Serviços
+```
+$ cd frontend/
+$ cp .env.example .env
+```
 
-| Nome        | Endpoint               |
-| ----------- | ---------------------- |
-| Aplicação   | http://localhost:8000  |
-| Flower      | http://localhost:8889  |
-| RabbitMQ UI | http://localhost:15672 |
+Depois inicie a aplicação frontend
+
+```
+$ yarn install
+$ yarn start
+ou
+$ npm install
+$ npm start
+```
+
+Acesse o front em: `http://localhost:3000`
 
 #### Enviando arquivo CSV
 
 Acesse `http://localhost:8000/api/v1/csv/product` e faça o upload do arquivo `product.csv`
 
-# INTRUÇÕES RODAR FRONT
+##### Documentação dos endpoints da aplicação
+
+Documentação da API `http://localhost:8000/docs`
+
+##### Serviços Web
+
+| Nome        | Endpoint               | Descricao                               |
+| ----------- | ---------------------- | --------------------------------------- |
+| Aplicação   | http://localhost:8000  | Aplicação em Django                     |
+| Flower      | http://localhost:8889  | UI para companhar Tarefas e Workers     |
+| RabbitMQ UI | http://localhost:15672 | Monitorar Filas e Messagens no RabbitMQ |
 
 -   ## Implementado até aqui
     -   Serviços Containerizados (Django, Postgres, Flower)
@@ -87,7 +110,7 @@ Acesse `http://localhost:8000/api/v1/csv/product` e faça o upload do arquivo `p
     -   Processamento de arquivo CSV em background com Celery e Rabbitmq
     -   Monitoramento da Fila com Flower
     -   Logs em arquivos
-    -   Cache com redis
+    -   Cache com Redis
     -   Django Admin restrito para Vendedor (seller)
     -   Listagem de Seller, Category e Product no Front-end
 
@@ -101,9 +124,11 @@ Acesse `http://localhost:8000/api/v1/csv/product` e faça o upload do arquivo `p
     -   Implementar preenchimendo das demais tabelas além de product, no endpoint que recebe arquivo CSV
     -   Criar factory de dados falsos com factory-boy e faker nos tests de unidade, para popular o banco
     -   Implementar container Nginx para loadbalancer dos serviços
-    -   Implementar File Storage como o AWS S3 para upload dos arquivos CSV e Imagens
+    -   Implementar FileStorage como o AWS S3 para upload dos arquivos CSV e Imagens
     -   Implementar pipeline de deploy com tests para
     -   Mudar logs de arquivos para serviços como LogStash ou Sentry
+    -   Implementar mais tratamento de exceções
+    -   Colocar cache em outros endpoints
 
 -   ##### Front-end
     -   Criar tela de login

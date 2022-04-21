@@ -87,19 +87,6 @@ const ListProductPage: React.FC = () => {
 				</td>
 
 				<td className={AppConstants.TABLE_ROW_TD_CLASS_NAME}>
-					<button
-						className="shadow bg-green-700 hover:bg-green-500 focus:shadow-outline focus:outline-none text-white font-bold mx-2 py-2 px-4 rounded"
-						type="button"
-						onClick={() => {
-							navigate(RouteConstants.EDIT_CATEGORY, {
-								state: {
-									product: product,
-								},
-							});
-						}}
-					>
-						<i className="fas fa-edit"></i> Edit
-					</button>
 
 					<button
 						className="shadow bg-yellow-700 hover:bg-yellow-500 focus:shadow-outline focus:outline-none text-white font-bold mx-2 py-2 px-4 rounded"
