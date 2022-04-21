@@ -87,7 +87,7 @@ export class RestAPIProvider {
 	public deleteSeller = (sellerId: number): Promise<AxiosResponse<any>> => {
 		return this.axiosInstance.request({
 			method: RestAPIConstants.DELETE_METHOD,
-			url: `${RestAPIConstants.SELLER}/${sellerId}/`,
+			url: `${RestAPIConstants.SELLER}/${sellerId}`,
 		});
 	};
 	/**
@@ -131,7 +131,49 @@ export class RestAPIProvider {
 	): Promise<AxiosResponse<any>> => {
 		return this.axiosInstance.request({
 			method: RestAPIConstants.DELETE_METHOD,
-			url: `${RestAPIConstants.CATEGORY}/${categoryId}/`,
+			url: `${RestAPIConstants.CATEGORY}/${categoryId}`,
+		});
+	};
+	/**
+	 * Product Endpoints
+	 * */
+	public getProducts = (
+		page?: number,
+		limit?: number
+	): Promise<AxiosResponse<any>> => {
+		return this.axiosInstance.request({
+			method: RestAPIConstants.GET_METHOD,
+			url: `${RestAPIConstants.PRODUCT}`,
+			params: {
+				page,
+				limit,
+			},
+		});
+	};
+
+	public createProduct = (data: any): Promise<AxiosResponse<any>> => {
+		return this.axiosInstance.request({
+			method: RestAPIConstants.POST_METHOD,
+			url: `${RestAPIConstants.PRODUCT}/`,
+			data,
+		});
+	};
+
+	public updateProduct = (
+		data: any,
+		productId: number
+	): Promise<AxiosResponse<any>> => {
+		return this.axiosInstance.request({
+			method: RestAPIConstants.PUT_METHOD,
+			url: `${RestAPIConstants.PRODUCT}/${productId}`,
+			data,
+		});
+	};
+
+	public deleteProduct = (productId: number): Promise<AxiosResponse<any>> => {
+		return this.axiosInstance.request({
+			method: RestAPIConstants.DELETE_METHOD,
+			url: `${RestAPIConstants.PRODUCT}/${productId}`,
 		});
 	};
 }

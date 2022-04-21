@@ -7,6 +7,9 @@ import ListSellersPage from "./pages/seller/list";
 import CreateCategoryPage from "./pages/category/create";
 import EditCategoryPage from "./pages/category/edit";
 import ListCategoryPage from "./pages/category/list";
+import CreateProductPage from "./pages/product/create";
+import EditProductPage from "./pages/product/edit";
+import ListProductPage from "./pages/product/list";
 import Navbar from "./resources/layouts/navbar";
 
 function App() {
@@ -50,6 +53,20 @@ function App() {
 							<Route
 								path={RouteConstants.EDIT_CATEGORY}
 								element={<EditCategoryPage />}
+							/>
+														<Route
+								path={RouteConstants.LIST_PRODUCT}
+								element={<ListProductPage />}
+							/>
+
+							<Route
+								path={RouteConstants.CREATE_PRODUCT}
+								element={<CreateProductPage />}
+							/>
+
+							<Route
+								path={RouteConstants.EDIT_PRODUCT}
+								element={<EditProductPage />}
 							/>
 						</Routes>
 					</section>

@@ -33,6 +33,15 @@ const Navbar: React.FC<NavbarOptions> = ({}) => {
 								<i className="fa fa-book"> </i> Category
 							</div>
 						</Link>
+												<Link
+							className="flex items-center text-yellow-600 text-base xl:text-xl no-underline hover:no-underline font-extrabold font-sans ml-10"
+							to={RouteConstants.LIST_PRODUCT}
+						>
+							<div>
+								{" "}
+								<i className="fa fa-star"> </i> Product
+							</div>
+						</Link>
 					</div>
 				</div>
 			</nav>
