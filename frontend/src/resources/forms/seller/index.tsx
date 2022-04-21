@@ -18,7 +18,7 @@ const SellerForm: React.FC<SellerFormOptions> = ({ props }) => {
 			</div>
 
 			<div className="mb-6">
-				<TextInput name="password" label="Password" props={props} />
+				<TextInput name="password" type="password" label="Password" props={props} />
 			</div>
 
 			<div className="md:flex md:items-center">

@@ -1,6 +1,6 @@
 import { TextInputOptions } from "./types";
 
-const TextInput: React.FC<TextInputOptions> = ({ name, label, props }) => {
+const TextInput: React.FC<TextInputOptions> = ({ name, label, type, props }) => {
 	console.log("props.errors", props.errors);
 	console.log("props.values", props.values);
 
@@ -14,7 +14,7 @@ const TextInput: React.FC<TextInputOptions> = ({ name, label, props }) => {
 				className="form-input block w-full focus:bg-white"
 				id={name}
 				name={name}
-				type="text"
+				type={ type ? type : 'text'}
 				placeholder={label}
 				onChange={props.handleChange}
 				value={props.values[name]}

@@ -160,12 +160,12 @@ const ListProductPage: React.FC = () => {
 					Products
 				</h1>
 
-				<Link
+				{/* <Link
 					className="shadow bg-green-700 hover:bg-green-500 focus:shadow-outline focus:outline-none text-white font-bold mx-2 py-2 px-4 rounded"
-					to={RouteConstants.CREATE_CATEGORY}
+					to={RouteConstants.CREATE_PRODUCT}
 				>
 					<i className="fas fa-plus"></i> New
-				</Link>
+				</Link> */}
 			</div>
 
 			<hr className="bg-gray-300 my-12" />
