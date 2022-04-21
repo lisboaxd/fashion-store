@@ -13,6 +13,7 @@ import datetime
 import os
 import sys
 from pathlib import Path
+from pickle import TRUE
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -31,7 +32,9 @@ SECRET_KEY = SECRET_KEY = os.environ.get(
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    "*",
+]
 
 
 # Application definition
@@ -47,6 +50,7 @@ DJANGO_BUILT_APPS = [
     "rest_framework.authtoken",
     "django_extensions",
     "drf_yasg",
+    "corsheaders",
 ]
 APPS = [
     "apps.sellers",
@@ -57,11 +61,16 @@ INSTALLED_APPS = DJANGO_BUILT_APPS + APPS
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
+    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+]
+
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",
 ]
 
 ROOT_URLCONF = "core.urls"
@@ -149,14 +158,16 @@ STATIC_URL = "static/"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-
 REST_FRAMEWORK = {
-    "DEFAULT_AUTHENTICATION_CLASSES": [
-        "rest_framework.authentication.SessionAuthentication",
-        "rest_framework.authentication.TokenAuthentication",
-    ],
+    # "DEFAULT_AUTHENTICATION_CLASSES": [
+    #     # "rest_framework.authentication.SessionAuthentication",
+    #     # "rest_framework.authentication.TokenAuthentication",
+    #     # "rest_framework.authentication.AllowAny",
+    #     "rest_framework.permissions.AllowAny",
+    # ],
     "DEFAULT_PERMISSION_CLASSES": [
-        "rest_framework.permissions.IsAuthenticated"
+        # "rest_framework.permissions.IsAuthenticated"
+        "rest_framework.permissions.AllowAny"
     ],
 }
 
