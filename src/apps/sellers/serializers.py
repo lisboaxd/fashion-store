@@ -1,3 +1,5 @@
+from imp import source_from_cache
+
 from django.contrib.auth.models import User
 from rest_framework import serializers
 
@@ -37,15 +39,32 @@ class RegisterSellerSerializer(serializers.ModelSerializer):
 
 
 class SellerSerializer(serializers.ModelSerializer):
+    user = UserSerializer()
+
     class Meta:
         model = Seller
-        fields = ["pk", "user"]
+        fields = ["id", "user", "created"]
+        read_only_fields = ["created"]
+        write_only_fields = ["user"]
+
+    def create(self, validated_data):
+        user = validated_data.pop("user")
+        user = UserSerializer.create(UserSerializer(), validated_data=user)
+        user.is_staff = True
+        add_permissions_to_user(user, ["category", "image", "stock", "product"])
+        user.save()
+        seller, created = Seller.objects.update_or_create(
+            user=user, **validated_data
+        )
+        return seller
 
 
 class CategorySerializer(serializers.ModelSerializer):
+    seller = SellerSerializer(source="owner", read_only=True)
+
     class Meta:
         model = Category
-        fields = ["pk", "category", "owner"]
+        fields = ["id", "category", "owner", "seller", "created"]
 
 
 class ImageSerializer(serializers.ModelSerializer):
@@ -57,19 +76,29 @@ class ImageSerializer(serializers.ModelSerializer):
 
 class ProductSerializer(serializers.ModelSerializer):
     images = ImageSerializer(many=True, read_only=True)
+    price_with_discount = serializers.DecimalField(
+        decimal_places=2, max_digits=10, read_only=True
+    )
 
     class Meta:
         model = Product
         fields = [
-            "pk",
+            "id",
             "product",
             "category",
             "price",
             "description",
             "images",
             "total_price",
+            "discount",
+            "price_with_discount",
+            "created",
         ]
-        read_only_fields = ["total_price", "stock__quantity"]
+        read_only_fields = [
+            "total_price",
+            "stock__quantity",
+            "price_with_discount",
+        ]
 
 
 class StockSerializer(serializers.ModelSerializer):

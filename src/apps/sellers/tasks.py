@@ -22,7 +22,6 @@ def save_on_database_from_csv_file(self, file_name, model_name):
     model = ContentType.objects.get(model=model_name)
     model = model.model_class()
     file_name = settings.BASE_DIR.joinpath(file_name)
-    error_lines = []
     with open(file_name, "r") as file:
         file_reader = csv.reader(file)
         for index, row in enumerate(file_reader):
@@ -33,12 +32,16 @@ def save_on_database_from_csv_file(self, file_name, model_name):
                 if len(columns) == len(row):
                     object_dict = dict(zip(columns, row))
                     model.objects.create(**object_dict)
-                    # TODO log created object
+                else:
+                    logger.info(
+                        {
+                            "message": f"Line number {line} has not corresponding number of values to columns",
+                            "line": index,
+                            "value": row,
+                        }
+                    )
             except Exception as e:
-                # TODO log exception
-
-                error_lines.append((index, row))
-                logger.error(
+                logger.warning(
                     {"exception": e, "file_line": index, "file_line_value": row}
                 )
     os.remove(file_name)

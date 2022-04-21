@@ -20,6 +20,7 @@ class ProductTestCase(TestCase):
 
         category_payload = {
             "category": "Categoria teste",
+            "seller": self.seller.pk,
             "owner": self.seller.pk,
         }
         self.category_create_response = self.client.post(
@@ -35,7 +36,7 @@ class ProductTestCase(TestCase):
 
         product_payload = {
             "product": "Nome produto",
-            "category": self.category_create_response.json().get("pk"),
+            "category": self.category_create_response.json().get("id"),
             "price": "90.00",
             "description": "Descricao",
         }
@@ -52,20 +53,23 @@ class ProductTestCase(TestCase):
         response = self.client.get(
             reverse(
                 self.retrieve_update_delete_url,
-                kwargs={"pk": self.list_response.json()[0].get("pk")},
+                kwargs={"pk": self.list_response.json()[0].get("id")},
             )
         )
         self.retrieve_response = response
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         content = {
-            "pk",
+            "id",
             "product",
             "category",
             "price",
             "description",
             "images",
             "total_price",
+            "discount",
+            "price_with_discount",
+            "created",
         }
         self.assertEquals(set(response.json().keys()), content)
 
@@ -73,7 +77,7 @@ class ProductTestCase(TestCase):
         response = self.client.delete(
             reverse(
                 self.retrieve_update_delete_url,
-                kwargs={"pk": self.retrieve_response.json().get("pk")},
+                kwargs={"pk": self.retrieve_response.json().get("id")},
             )
         )
         self.assertEquals(response.status_code, 204)

@@ -36,12 +36,12 @@ class CategoryTestCase(TestCase):
         response = self.client.get(
             reverse(
                 self.retrieve_update_delete_url,
-                kwargs={"pk": response.json().get("pk")},
+                kwargs={"pk": response.json().get("id")},
             )
         )
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        content = {"pk", "category", "owner"}
+        content = {"id", "category", "owner", "created", "seller"}
         self.assertEquals(set(response.json().keys()), content)
 
     def test_delete(self):
@@ -49,7 +49,7 @@ class CategoryTestCase(TestCase):
         response = self.client.delete(
             reverse(
                 self.retrieve_update_delete_url,
-                kwargs={"pk": response.json().get("pk")},
+                kwargs={"pk": response.json().get("id")},
             )
         )
         self.assertEquals(response.status_code, 204)

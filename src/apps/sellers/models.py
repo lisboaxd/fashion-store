@@ -1,7 +1,8 @@
-from statistics import mode
+from decimal import Decimal
 
 from core.models import TimeStampedModel
 from django.contrib.auth import get_user_model
+from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 
 from .utils import upload_gallery_image
@@ -47,6 +48,13 @@ class Product(TimeStampedModel):
     category = models.ForeignKey(
         Category, on_delete=models.CASCADE, related_name="products"
     )
+    discount = models.PositiveIntegerField(
+        "Discount",
+        default=0,
+        validators=[MinValueValidator(0), MaxValueValidator(100)],
+        null=True,
+        blank=True,
+    )
 
     class Meta:
         verbose_name_plural = "products"
@@ -57,6 +65,10 @@ class Product(TimeStampedModel):
     @property
     def total_price(self):
         return self.price * self.stock.quantity
+
+    @property
+    def price_with_discount(self):
+        return self.price - (self.price * Decimal(self.discount / 100))
 
 
 class Image(models.Model):

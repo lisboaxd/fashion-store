@@ -1,5 +1,3 @@
-import json
-
 from django.contrib.auth.models import User
 from django.test import TestCase
 from django.urls import reverse
@@ -58,15 +56,19 @@ class SellerTestCase(TestCase):
         self.client.login(username="test_user", password="Test@user__dafiti")
 
     def test_create(self):
-        user = User.objects.create_user(
-            username="test_user2",
-            email="test_user2@test.com",
-            password="Test@user__dafiti",
-            first_name="Tes2t",
-            last_name="User2",
-        )
+
         response = self.client.post(
-            self.create_read_url, data={"user": user.pk}
+            self.create_read_url,
+            data={
+                "user": {
+                    "username": "test_user2",
+                    "email": "test_user2@test.com",
+                    "password": "Test@user__dafiti",
+                    "first_name": "Tes2t",
+                    "last_name": "User2",
+                }
+            },
+            content_type="application/json",
         )
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
@@ -86,7 +88,23 @@ class SellerTestCase(TestCase):
         self.assertNotEqual(response.json(), [])
 
     def test_retrieve(self):
-        response = self.client.get(self.retrieve_update_delete_url)
+        post = {
+            "user": {
+                "username": "test_user3",
+                "email": "test_user3@test.com",
+                "password": "Test@user__dafiti",
+                "first_name": "Test3",
+                "last_name": "User3",
+            }
+        }
+        url = reverse("seller_register")
+        seller_created = self.client.post(
+            url, data=post, content_type="application/json"
+        ).json()
+        response = self.client.get(
+            reverse(
+                "seller_retrieve_update_destroy",
+                kwargs={"pk": seller_created["pk"]},
+            )
+        )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        content = {"pk": self.seller_user.pk, "user": self.test_user.pk}
-        self.assertEquals(response.json(), content)

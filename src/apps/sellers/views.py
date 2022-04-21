@@ -54,6 +54,14 @@ class SellerListCreateAPIView(ListCreateAPIView):
     queryset = Seller.objects.all()
     serializer_class = SellerSerializer
 
+    def create(self, request, *args, **kwargs):
+        user = UserSerializer(data=request.data.get("user"))
+        if user.is_valid(raise_exception=True):
+            seller = self.get_serializer(data={"user": user.validated_data})
+            seller.is_valid()
+            seller.save()
+            return response.Response(seller.data, status.HTTP_201_CREATED)
+
 
 class SellerRetrieveUpdateDestroy(RetrieveUpdateDestroyAPIView):
     queryset = Seller.objects.all()
@@ -64,21 +72,22 @@ class CategoryListCreateAPIView(ListCreateAPIView):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
 
-    def create(self, request, *args, **kwargs):
-        serializer = self.get_serializer_class()
-        serializer = serializer(data=request.data)
-        if serializer.is_valid(raise_exception=True):
-            try:
-                serializer.save()
-                return response.Response(
-                    serializer.data, status.HTTP_201_CREATED
-                )
-            except Exception as e:
-                logger.warning({"exception": e})
-                return response.Response(
-                    {"message": "You should be a Seller"},
-                    status.HTTP_400_BAD_REQUEST,
-                )
+    # def create(self, request, *args, **kwargs):
+    #     serializer = self.get_serializer_class()
+    #     serializer = serializer(data=request.data)
+    #     if serializer.is_valid(raise_exception=True):
+    #         try:
+    #             serializer.save()
+    #             return response.Response(
+    #                 serializer.data, status.HTTP_201_CREATED
+    #             )
+    #         except Exception as e:
+    #             logger.warning({"exception": e})
+    #             import ipdb; ipdb.set_trace()
+    #             return response.Response(
+    #                 {"message": "You should be a Seller"},
+    #                 status.HTTP_400_BAD_REQUEST,
+    #             )
 
 
 class CategoryRetrieveUpdateDestroy(RetrieveUpdateDestroyAPIView):
@@ -133,10 +142,6 @@ class CsvFile(CreateAPIView):
     serializer_class = CSVUploadSerializer
 
     def create(self, request, *args, **kwargs):
-        """
-        #TODO One of the fields of the model/table must have its’ value
-        #TODO calculated based on 1 or more of the other ones.
-        """
 
         try:
             model = ContentType.objects.get(model=kwargs.get("model_name"))
@@ -153,4 +158,7 @@ class CsvFile(CreateAPIView):
         save_on_database_from_csv_file.delay(
             file_name, kwargs.get("model_name")
         )
-        return response.Response(status=status.HTTP_204_NO_CONTENT)
+        return response.Response(
+            {"message", "File uploaded with success."},
+            status=status.HTTP_200_OK,
+        )
