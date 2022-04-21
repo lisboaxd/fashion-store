@@ -1,26 +1,34 @@
 import { Formik, FormikProps } from "formik";
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import useAsyncEffect from "use-async-effect";
 import { HTTPConstants } from "../../../app/constants/http.constants";
 import RouteConstants from "../../../app/constants/route.constants";
 import { ToastProvider } from "../../../app/providers/toast.provider";
+import { CategoryService } from "../../../app/services/category.service";
 import { SellerService } from "../../../app/services/seller.service";
+import { Seller } from "../../../app/entities/seller.entity";
 import Loading from "../../../resources/components/loading";
-import SellerForm from "../../../resources/forms/seller";
-import { CreateSellerFormData } from "./types";
-import CreateSellerYupSchema from "./schema.yup";
+import CategoryForm from "../../../resources/forms/category";
+import { CreateCategoryFormData } from "./types";
+import CreateCategoryYupSchema from "./schema.yup";
 import { AxiosResponse } from "axios";
 
 const CreateCategoryPage: React.FC = () => {
 	const toastProvider: ToastProvider = ToastProvider.Instance;
+	const categoryService: CategoryService = CategoryService.Instance;
 	const sellerService: SellerService = SellerService.Instance;
 
 	const navigate: any = useNavigate();
 
-	async function createSeller(data: CreateSellerFormData): Promise<void> {
-		const requestResponse: AxiosResponse<any> = await sellerService.create({
-			user: data,
-		});
+	const [sellerStates, setSellerStates] = useState<Array<Seller>>();
+	async function createCategory(data: CreateCategoryFormData): Promise<void> {
+		console.log(data);
+		const requestResponse: AxiosResponse<any> =
+			await categoryService.create({
+				category: data.category,
+				owner: data.owner.value,
+			});
 
 		if (requestResponse.status === HTTPConstants.CREATED) {
 			toastProvider.success();
@@ -29,13 +37,32 @@ const CreateCategoryPage: React.FC = () => {
 		}
 	}
 
-	async function handleSubmit(data: CreateSellerFormData): Promise<void> {
+	const loadSellerStates = async (): Promise<void> => {
+		const sellerStates: any = await sellerService.get();
+
+		setSellerStates(sellerStates.data);
+	};
+
+	async function handleSubmit(data: CreateCategoryFormData): Promise<void> {
 		try {
-			await createSeller(data);
+			console.log(data);
+			await createCategory(data);
 		} catch (error) {
 			console.error(error);
 		}
 	}
+	/**
+	 * Carrega a tela
+	 * @returns {Promise<void>} Resultado do carregamento
+	 */
+	useAsyncEffect(async (): Promise<void> => {
+		try {
+			// loadUser();
+			await loadSellerStates();
+		} catch (error) {
+			console.error(error);
+		}
+	}, []);
 
 	return (
 		<>
@@ -47,17 +74,15 @@ const CreateCategoryPage: React.FC = () => {
 			<div className="p-8 mt-6 lg:mt-0 rounded shadow bg-white mb-40">
 				<Formik
 					initialValues={{
-						first_name: "",
-						last_name: "",
-						password: "",
-						username: "",
+						category: "",
+						owner: "",
 					}}
 					onSubmit={handleSubmit}
-					validationSchema={CreateSellerYupSchema}
+					validationSchema={CreateCategoryYupSchema}
 					validateOnChange={false}
 					validateOnBlur
 				>
-					{(props: FormikProps<CreateSellerFormData>) => (
+					{(props: FormikProps<CreateCategoryFormData>) => (
 						<form
 							autoComplete="off"
 							onSubmit={props.handleSubmit}
@@ -67,7 +92,10 @@ const CreateCategoryPage: React.FC = () => {
 							{props.isSubmitting ? (
 								<Loading />
 							) : (
-								<SellerForm props={props} />
+								<CategoryForm
+									props={props}
+									sellerStates={sellerStates}
+								/>
 							)}
 						</form>
 					)}

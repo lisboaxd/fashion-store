@@ -110,7 +110,7 @@ export class RestAPIProvider {
 	public createCategory = (data: any): Promise<AxiosResponse<any>> => {
 		return this.axiosInstance.request({
 			method: RestAPIConstants.POST_METHOD,
-			url: `${RestAPIConstants.CATEGORY}`,
+			url: `${RestAPIConstants.CATEGORY}/`,
 			data,
 		});
 	};
@@ -121,7 +121,7 @@ export class RestAPIProvider {
 	): Promise<AxiosResponse<any>> => {
 		return this.axiosInstance.request({
 			method: RestAPIConstants.PATCH_METHOD,
-			url: `${RestAPIConstants.CATEGORY}/${categoryId}`,
+			url: `${RestAPIConstants.CATEGORY}/${categoryId}/'`,
 			data,
 		});
 	};
@@ -131,7 +131,7 @@ export class RestAPIProvider {
 	): Promise<AxiosResponse<any>> => {
 		return this.axiosInstance.request({
 			method: RestAPIConstants.DELETE_METHOD,
-			url: `${RestAPIConstants.CATEGORY}/${categoryId}`,
+			url: `${RestAPIConstants.CATEGORY}/${categoryId}/`,
 		});
 	};
 }

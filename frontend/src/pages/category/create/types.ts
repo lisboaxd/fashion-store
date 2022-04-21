@@ -1,6 +1,4 @@
-export interface CreateSellerFormData {
-	first_name: string;
-	last_name: string;
-	password: string;
-	username: string;
+export interface CreateCategoryFormData {
+	category: string;
+	owner: any;
 }

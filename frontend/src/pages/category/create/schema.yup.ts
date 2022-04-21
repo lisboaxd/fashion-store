@@ -1,10 +1,8 @@
 import Yup from "../../../config/yup.config";
 
-const CreateSellerYupSchema = Yup.object().shape({
-	first_name: Yup.string().required(),
-	last_name: Yup.string().required(),
-	password: Yup.string().required(),
-	username: Yup.string().required(),
+const CreateCategoryYupSchema = Yup.object().shape({
+	category: Yup.string().required(),
+	owner: Yup.mixed().required(),
 });
 
-export default CreateSellerYupSchema;
+export default CreateCategoryYupSchema;
