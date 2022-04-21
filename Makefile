@@ -31,7 +31,7 @@ test: ## Run all tests of the application
 	docker-compose -f compose/docker-compose.yml run --rm django python manage.py test
 
 loaddata: ## Load necessary data on database for dev enviroment
-	docker-compose -f compose/docker-compose.yml run --rm django python manage.py loaddata fixtures/user.json
+	docker-compose -f compose/docker-compose.yml run --rm django python manage.py loaddata fixtures/user.json fixtures/seller.json fixtures/category.json fixtures/product.json fixtures/stock.json
 
 setup: # Create diretory logs
 	@mkdir src/logs/
