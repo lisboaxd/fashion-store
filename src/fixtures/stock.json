@@ -1,1 +1,1 @@
-[{"model": "sellers.stock", "pk": 1, "fields": {"product": 1, "seller": 1, "quantity": 50}}, {"model": "sellers.stock", "pk": 2, "fields": {"product": 2, "seller": 1, "quantity": 60}}]
+[{"model": "sellers.stock", "pk": 1, "fields": {"product": 1, "seller": 1, "quantity": 30}}]
