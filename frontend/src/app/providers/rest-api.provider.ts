@@ -47,6 +47,9 @@ export class RestAPIProvider {
 	): Promise<AxiosRequestConfig> {
 		return requestConfig;
 	}
+	/**
+	 * Seller Endpoints
+	 * */
 
 	public getSellers = (
 		page?: number,
@@ -85,6 +88,50 @@ export class RestAPIProvider {
 		return this.axiosInstance.request({
 			method: RestAPIConstants.DELETE_METHOD,
 			url: `${RestAPIConstants.SELLER}/${sellerId}/`,
+		});
+	};
+	/**
+	 * Category Endpoints
+	 * */
+	public getCategories = (
+		page?: number,
+		limit?: number
+	): Promise<AxiosResponse<any>> => {
+		return this.axiosInstance.request({
+			method: RestAPIConstants.GET_METHOD,
+			url: `${RestAPIConstants.CATEGORY}`,
+			params: {
+				page,
+				limit,
+			},
+		});
+	};
+
+	public createCategory = (data: any): Promise<AxiosResponse<any>> => {
+		return this.axiosInstance.request({
+			method: RestAPIConstants.POST_METHOD,
+			url: `${RestAPIConstants.CATEGORY}`,
+			data,
+		});
+	};
+
+	public updateCategory = (
+		data: any,
+		categoryId: number
+	): Promise<AxiosResponse<any>> => {
+		return this.axiosInstance.request({
+			method: RestAPIConstants.PATCH_METHOD,
+			url: `${RestAPIConstants.CATEGORY}/${categoryId}`,
+			data,
+		});
+	};
+
+	public deleteCategory = (
+		categoryId: number
+	): Promise<AxiosResponse<any>> => {
+		return this.axiosInstance.request({
+			method: RestAPIConstants.DELETE_METHOD,
+			url: `${RestAPIConstants.CATEGORY}/${categoryId}`,
 		});
 	};
 }

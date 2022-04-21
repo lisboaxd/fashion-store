@@ -14,11 +14,11 @@ const SellerForm: React.FC<SellerFormOptions> = ({ props }) => {
 			</div>
 
 			<div className="mb-6">
-				<TextInput name="password" label="Password" props={props} />
+				<TextInput name="username" label="Username" props={props} />
 			</div>
 
 			<div className="mb-6">
-				<TextInput name="username" label="username" props={props} />
+				<TextInput name="password" label="Password" props={props} />
 			</div>
 
 			<div className="md:flex md:items-center">

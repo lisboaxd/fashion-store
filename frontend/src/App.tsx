@@ -4,6 +4,9 @@ import RouteConstants from "./app/constants/route.constants";
 import CreateSellersPage from "./pages/seller/create";
 import EditSellersPage from "./pages/seller/edit";
 import ListSellersPage from "./pages/seller/list";
+import CreateCategoryPage from "./pages/category/create";
+import EditCategoryPage from "./pages/category/edit";
+import ListCategoryPage from "./pages/category/list";
 import Navbar from "./resources/layouts/navbar";
 
 function App() {
@@ -33,6 +36,20 @@ function App() {
 							<Route
 								path={RouteConstants.EDIT_SELLER}
 								element={<EditSellersPage />}
+							/>
+							<Route
+								path={RouteConstants.LIST_CATEGORY}
+								element={<ListCategoryPage />}
+							/>
+
+							<Route
+								path={RouteConstants.CREATE_CATEGORY}
+								element={<CreateCategoryPage />}
+							/>
+
+							<Route
+								path={RouteConstants.EDIT_CATEGORY}
+								element={<EditCategoryPage />}
 							/>
 						</Routes>
 					</section>
