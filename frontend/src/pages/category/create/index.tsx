@@ -33,7 +33,7 @@ const CreateCategoryPage: React.FC = () => {
 		if (requestResponse.status === HTTPConstants.CREATED) {
 			toastProvider.success();
 
-			navigate(RouteConstants.LIST_SELLER);
+			navigate(RouteConstants.LIST_CATEGORY);
 		}
 	}
 
