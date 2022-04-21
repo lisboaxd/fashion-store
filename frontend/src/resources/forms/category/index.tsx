@@ -18,18 +18,29 @@ const CategoryForm: React.FC<CategoryFormOptions> = ({
 					props={props}
 				/>
 			</div>
+
 			{sellerStates && (
-				<div className="mb-6">
-					<SearchSelectInput
-						name="owner"
-						placeholder="seller"
-						props={props}
-						options={sellerStates.map((sellerStates: Seller) => ({
-							value: sellerStates.id,
-							label: sellerStates.user.first_name,
-						}))}
-					/>
-				</div>
+				<>
+					<label
+						className="block text-gray-600 font-bold"
+						htmlFor="owner"
+					>
+						Seller
+					</label>
+					<div className="mb-6">
+						<SearchSelectInput
+							name="owner"
+							placeholder="seller"
+							props={props}
+							options={sellerStates.map(
+								(sellerStates: Seller) => ({
+									value: sellerStates.id,
+									label: sellerStates.user.first_name,
+								})
+							)}
+						/>
+					</div>
+				</>
 			)}
 
 			<div className="md:flex md:items-center">

@@ -120,8 +120,8 @@ export class RestAPIProvider {
 		categoryId: number
 	): Promise<AxiosResponse<any>> => {
 		return this.axiosInstance.request({
-			method: RestAPIConstants.PATCH_METHOD,
-			url: `${RestAPIConstants.CATEGORY}/${categoryId}/'`,
+			method: RestAPIConstants.PUT_METHOD,
+			url: `${RestAPIConstants.CATEGORY}/${categoryId}`,
 			data,
 		});
 	};
