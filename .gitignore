@@ -386,8 +386,8 @@ _pkginfo.txt
 
 # local directories 
 rest_requests/
-src/images/
-data/
+**/images/
+backend/data/
 
 
 # Visual Studio cache files
