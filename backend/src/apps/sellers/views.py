@@ -72,23 +72,6 @@ class CategoryListCreateAPIView(ListCreateAPIView):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
 
-    # def create(self, request, *args, **kwargs):
-    #     serializer = self.get_serializer_class()
-    #     serializer = serializer(data=request.data)
-    #     if serializer.is_valid(raise_exception=True):
-    #         try:
-    #             serializer.save()
-    #             return response.Response(
-    #                 serializer.data, status.HTTP_201_CREATED
-    #             )
-    #         except Exception as e:
-    #             logger.warning({"exception": e})
-    #             import ipdb; ipdb.set_trace()
-    #             return response.Response(
-    #                 {"message": "You should be a Seller"},
-    #                 status.HTTP_400_BAD_REQUEST,
-    #             )
-
 
 class CategoryRetrieveUpdateDestroy(RetrieveUpdateDestroyAPIView):
     queryset = Category.objects.all()
