@@ -384,6 +384,12 @@ _pkginfo.txt
 *.appxbundle
 *.appxupload
 
+# local directories 
+rest_requests/
+**/images/
+backend/data/
+
+
 # Visual Studio cache files
 # files ending in .cache can be ignored
 *.[Cc]ache

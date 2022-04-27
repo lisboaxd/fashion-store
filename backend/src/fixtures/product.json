@@ -1,0 +1,1 @@
+[{"model": "sellers.product", "pk": 1, "fields": {"created": "2022-04-21T21:12:03.044Z", "modified": "2022-04-21T21:12:03.044Z", "product": "Camisa", "price": "79.90", "description": "Camisa masculina , lista, preta, de algodão.", "category": 1, "discount": 1}}]
